@@ -24,7 +24,9 @@ export async function getBookings(): Promise<Booking[]> {
     const data = await store.get(BOOKINGS_STORE_KEY);
     if (!data) return [];
 
-    const parsed = data as Booking[];
+    // Convert ArrayBuffer/Buffer to string and parse JSON
+    const str = typeof data === "string" ? data : new TextDecoder().decode(data);
+    const parsed = JSON.parse(str) as Booking[];
     return Array.isArray(parsed) ? parsed : [];
   } catch (error) {
     console.error("Error reading bookings:", error);
@@ -55,7 +57,8 @@ export async function addBooking(
     // Append to log
     try {
       const existingLog = await store.get(LOGS_STORE_KEY);
-      const logContent = (existingLog || "") + `${JSON.stringify(booking)}\n`;
+      const logStr = existingLog ? (typeof existingLog === "string" ? existingLog : new TextDecoder().decode(existingLog)) : "";
+      const logContent = logStr + `${JSON.stringify(booking)}\n`;
       await store.set(LOGS_STORE_KEY, logContent);
     } catch {
       // Log is best-effort
@@ -88,6 +91,7 @@ export async function updateBookingStatus(
     // Log status update
     try {
       const existingLog = await store.get(LOGS_STORE_KEY);
+      const logStr = existingLog ? (typeof existingLog === "string" ? existingLog : new TextDecoder().decode(existingLog)) : "";
       const logEntry = JSON.stringify({
         _event: "status_update",
         id,
@@ -95,7 +99,7 @@ export async function updateBookingStatus(
         at: new Date().toISOString(),
         booking: list[idx],
       });
-      const logContent = (existingLog || "") + `${logEntry}\n`;
+      const logContent = logStr + `${logEntry}\n`;
       await store.set(LOGS_STORE_KEY, logContent);
     } catch {
       // Log is best-effort
