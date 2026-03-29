@@ -80,20 +80,20 @@ export function HomeHeroAnimated() {
           </motion.p>
           <motion.h1
             variants={item}
-            className="mt-3 max-w-4xl font-display text-[2.35rem] leading-[1.08] text-white xs:text-5xl sm:mt-4 sm:text-6xl md:text-7xl lg:text-8xl"
+            className="mt-2 max-w-4xl font-display text-2xl leading-[1.08] text-white xs:text-3xl sm:mt-3 sm:text-5xl md:text-6xl lg:text-7xl"
           >
             Discover Your Radiance
           </motion.h1>
           <motion.p
             variants={item}
-            className="mt-4 max-w-lg text-sm leading-relaxed text-white/75 sm:mt-6 sm:text-base md:text-lg"
+            className="mt-2.5 max-w-lg text-xs leading-relaxed text-white/75 xs:text-sm sm:mt-4 sm:text-base md:text-lg"
           >
             An elevated beauty ritual — precision hair, luminous skin, and artistry
             that feels unmistakably you.
           </motion.p>
           <motion.div
             variants={item}
-            className="mt-7 flex flex-wrap items-center gap-2.5 sm:mt-9 sm:gap-3"
+            className="mt-4 flex flex-wrap items-center gap-2 xs:gap-2.5 sm:mt-6 sm:gap-3"
           >
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
