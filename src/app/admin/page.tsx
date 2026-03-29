@@ -4,7 +4,7 @@ import {
   adminCookieName,
   verifySessionToken,
 } from "@/lib/admin-session";
-import { getBookings } from "@/lib/bookings-store";
+import { getBookings, type Booking } from "@/lib/bookings-store";
 import { AdminBookingsClient } from "./AdminBookingsClient";
 import type { Metadata } from "next";
 
@@ -19,7 +19,7 @@ export default async function AdminPage() {
     redirect("/admin/login");
   }
 
-  let bookings = [];
+  let bookings: Booking[] = [];
   try {
     bookings = await getBookings();
   } catch (error) {
