@@ -18,6 +18,14 @@ export default async function AdminPage() {
   if (!verifySessionToken(jar.get(adminCookieName)?.value)) {
     redirect("/admin/login");
   }
-  const bookings = await getBookings();
+
+  let bookings = [];
+  try {
+    bookings = await getBookings();
+  } catch (error) {
+    console.error("Failed to load bookings:", error);
+    // Return empty array - allows admin page to still load
+  }
+
   return <AdminBookingsClient initial={bookings} />;
 }
