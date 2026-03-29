@@ -47,7 +47,8 @@ export async function POST(request: Request) {
       message,
     });
     return NextResponse.json({ ok: true, id: booking.id });
-  } catch {
+  } catch (err) {
+    console.error("Booking save failed:", err instanceof Error ? err.message : String(err));
     return NextResponse.json(
       { error: "Could not save booking." },
       { status: 500 }
