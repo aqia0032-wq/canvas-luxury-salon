@@ -43,13 +43,6 @@ export default function AdminLoginPage() {
       >
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Staff</p>
         <h1 className="mt-3 font-display text-3xl text-white">Admin login</h1>
-        <p className="mt-2 text-sm text-white/50">
-          If <code className="text-white/60">ADMIN_PASSWORD</code> is set in{" "}
-          <code className="text-white/60">.env.local</code>, use that value. Otherwise
-          the default is <code className="text-gold/80">admin123</code>. Use{" "}
-          <code className="text-white/60">KEY=value</code> with no spaces around{" "}
-          <code className="text-white/60">=</code>.
-        </p>
         <label className="mt-8 block">
           <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50">
             Password
