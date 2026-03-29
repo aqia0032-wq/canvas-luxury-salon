@@ -51,7 +51,7 @@ export function SiteFooter() {
               </a>
             </li>
             <li>
-              <a href={`tel:${site.phoneDigits}`} className="hover:text-white">
+              <a href={`tel:+${site.phoneDigits}`} className="hover:text-white">
                 {site.phone}
               </a>
             </li>

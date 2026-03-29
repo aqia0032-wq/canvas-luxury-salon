@@ -6,19 +6,31 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { site } from "@/lib/site";
 
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
+const simpleLinks = [
   { href: "/about", label: "About" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/contact", label: "Contact" },
-  { href: "/book", label: "Book" },
-];
+] as const;
+
+const servicesSub = [
+  { href: "/services", label: "All services" },
+  { href: "/services/hair", label: "Hair" },
+  { href: "/services/facial", label: "Facial" },
+  { href: "/services/body-spa", label: "Body & spa" },
+  { href: "/services/nails", label: "Mani, pedi & nails" },
+  { href: "/services/mehndi", label: "Mehndi" },
+] as const;
+
+function servicesActive(pathname: string) {
+  return pathname === "/services" || pathname.startsWith("/services/");
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [deskServicesOpen, setDeskServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -29,6 +41,8 @@ export function SiteHeader() {
 
   useEffect(() => {
     setOpen(false);
+    setMobileServicesOpen(false);
+    setDeskServicesOpen(false);
   }, [pathname]);
 
   return (
@@ -50,7 +64,78 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
-          {links.map((l) => {
+          <Link
+            href="/"
+            className={`relative text-xs uppercase tracking-[0.2em] transition-colors ${
+              pathname === "/"
+                ? "text-gold"
+                : "text-white/70 hover:text-white"
+            }`}
+          >
+            Home
+            {pathname === "/" && (
+              <motion.span
+                layoutId="navline"
+                className="absolute -bottom-1 left-0 h-px w-full bg-gold"
+              />
+            )}
+          </Link>
+
+          <div
+            className="relative py-1"
+            onMouseEnter={() => setDeskServicesOpen(true)}
+            onMouseLeave={() => setDeskServicesOpen(false)}
+          >
+            <Link
+              href="/services"
+              className={`relative flex items-center gap-1 text-xs uppercase tracking-[0.2em] transition-colors ${
+                servicesActive(pathname)
+                  ? "text-gold"
+                  : "text-white/70 hover:text-white"
+              }`}
+            >
+              Services
+              <span className="text-[10px] opacity-70" aria-hidden>
+                ▾
+              </span>
+              {servicesActive(pathname) && (
+                <motion.span
+                  layoutId="navline"
+                  className="absolute -bottom-1 left-0 h-px w-full bg-gold"
+                />
+              )}
+            </Link>
+
+            <AnimatePresence>
+              {deskServicesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 top-full z-50 min-w-[200px] pt-2"
+                >
+                  <div className="rounded-xl border border-white/10 bg-black/95 py-2 shadow-xl backdrop-blur-xl">
+                    {servicesSub.map((s) => (
+                      <Link
+                        key={s.href}
+                        href={s.href}
+                        className={`block px-4 py-2.5 text-xs uppercase tracking-[0.15em] transition hover:bg-white/5 ${
+                          pathname === s.href
+                            ? "text-gold"
+                            : "text-white/75 hover:text-white"
+                        }`}
+                      >
+                        {s.label}
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {simpleLinks.map((l) => {
             const active = pathname === l.href;
             return (
               <Link
@@ -70,12 +155,29 @@ export function SiteHeader() {
               </Link>
             );
           })}
+
+          <Link
+            href="/book"
+            className={`relative text-xs uppercase tracking-[0.2em] transition-colors ${
+              pathname === "/book"
+                ? "text-gold"
+                : "text-white/70 hover:text-white"
+            }`}
+          >
+            Book
+            {pathname === "/book" && (
+              <motion.span
+                layoutId="navline"
+                className="absolute -bottom-1 left-0 h-px w-full bg-gold"
+              />
+            )}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
           <Link
             href="/book"
-            className="hidden rounded-full border border-gold/50 bg-gold/10 px-5 py-2 text-xs font-medium uppercase tracking-widest text-gold-light transition hover:border-gold hover:bg-gold/20 md:inline-block"
+            className="hidden rounded-full border border-gold/50 bg-gold/10 px-5 py-2 text-xs font-medium uppercase tracking-widest text-gold-light transition hover:border-gold hover:bg-gold/20 md:inline-block lg:hidden"
           >
             Book
           </Link>
@@ -104,7 +206,44 @@ export function SiteHeader() {
             className="border-b border-white/10 bg-black/95 backdrop-blur-xl lg:hidden"
           >
             <nav className="flex flex-col gap-1 px-5 py-6">
-              {links.map((l) => (
+              <Link
+                href="/"
+                className={`py-3 text-sm uppercase tracking-[0.2em] ${
+                  pathname === "/" ? "text-gold" : "text-white/80"
+                }`}
+              >
+                Home
+              </Link>
+
+              <div className="border-b border-white/5 py-1">
+                <button
+                  type="button"
+                  onClick={() => setMobileServicesOpen((v) => !v)}
+                  className="flex w-full items-center justify-between py-3 text-sm uppercase tracking-[0.2em] text-white/80"
+                >
+                  Services
+                  <span className="text-xs" aria-hidden>
+                    {mobileServicesOpen ? "▴" : "▾"}
+                  </span>
+                </button>
+                {mobileServicesOpen && (
+                  <div className="mb-2 ml-3 flex flex-col border-l border-gold/30 pl-4">
+                    {servicesSub.map((s) => (
+                      <Link
+                        key={s.href}
+                        href={s.href}
+                        className={`py-2 text-xs uppercase tracking-[0.15em] ${
+                          pathname === s.href ? "text-gold" : "text-white/65"
+                        }`}
+                      >
+                        {s.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {simpleLinks.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
@@ -115,6 +254,14 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
+              <Link
+                href="/book"
+                className={`py-3 text-sm uppercase tracking-[0.2em] ${
+                  pathname === "/book" ? "text-gold" : "text-white/80"
+                }`}
+              >
+                Book
+              </Link>
             </nav>
           </motion.div>
         )}

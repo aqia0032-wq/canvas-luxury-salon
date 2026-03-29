@@ -2,17 +2,21 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { site } from "@/lib/site";
+
+const isDev = process.env.NODE_ENV === "development";
 
 export function PageLoader() {
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(isDev);
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    const t = window.setTimeout(() => setDone(true), reduce ? 0 : 1200);
+    if (isDev) return;
+    const t = window.setTimeout(() => setDone(true), reduce ? 0 : 650);
     return () => window.clearTimeout(t);
   }, [reduce]);
 
-  if (reduce) return null;
+  if (isDev || reduce) return null;
 
   return (
     <AnimatePresence>
@@ -21,7 +25,7 @@ export function PageLoader() {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0a0a0a]"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="flex flex-col items-center gap-6">
             <motion.div
@@ -36,7 +40,7 @@ export function PageLoader() {
               animate={{ opacity: 1, letterSpacing: "0.35em" }}
               transition={{ duration: 0.8 }}
             >
-              CANVAS
+              {site.name.split(/\s+/)[0]?.toUpperCase() ?? "HUMA"}
             </motion.p>
             <motion.div
               className="h-1 w-24 overflow-hidden rounded-full bg-white/10"

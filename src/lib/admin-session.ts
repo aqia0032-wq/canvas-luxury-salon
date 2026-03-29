@@ -42,12 +42,16 @@ export function verifySessionToken(token: string | undefined): boolean {
 }
 
 export function verifyAdminPassword(password: string): boolean {
-  const expected = process.env.ADMIN_PASSWORD || "admin123";
-  if (password.length !== expected.length) return false;
+  const fromEnv = process.env.ADMIN_PASSWORD?.trim();
+  const expected =
+    fromEnv && fromEnv.length > 0 ? fromEnv : "admin123";
+  const input = password.normalize("NFKC").trim();
+  const exp = expected.normalize("NFKC");
+  if (input.length !== exp.length) return false;
   try {
     return timingSafeEqual(
-      Buffer.from(password, "utf-8"),
-      Buffer.from(expected, "utf-8")
+      Buffer.from(input, "utf-8"),
+      Buffer.from(exp, "utf-8")
     );
   } catch {
     return false;

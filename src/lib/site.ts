@@ -1,11 +1,18 @@
+import { allBodySpaServiceNames } from "@/lib/body-spa-services-data";
+import { allFacialServiceNames } from "@/lib/facial-services-data";
+import { allHairServiceNames } from "@/lib/hair-services-data";
+import { allHomeMakeupCardNames } from "@/lib/makeup-home-cards";
+import { allMehndiServiceNames } from "@/lib/mehndi-services-data";
+import { allNailsServiceNames } from "@/lib/nails-services-data";
+
 export const site = {
-  name: "Canvas Salon & Studio",
+  name: "Huma Salon & Studio",
   tagline: "Luxury beauty experience",
   description:
-    "Premium beauty salon in Lahore — hair, facial, body treatments, and expert makeup for every occasion.",
-  email: "info@canvassalon.com.pk",
-  phone: "+92 328 642 7572",
-  phoneDigits: "923286427572",
+    "Huma — premium beauty salon in Lahore: hair, facial, body treatments, and expert makeup for every occasion.",
+  email: "humaaqi96@gmail.com",
+  phone: "0328 5734656",
+  phoneDigits: "923285734656",
   address: "House 60, B1 MM Alam Rd, Block B 1 Gulberg III, Lahore, Punjab 44000",
   social: {
     instagram: "https://instagram.com",
@@ -17,35 +24,55 @@ export const site = {
 export const serviceCategories = [
   {
     slug: "hair",
-    title: "Hair Treatment",
-    short: "Color, extensions, and restorative care.",
+    title: "Hair",
+    short: "Cuts, color, treatments, styling & bridal hair.",
+    href: "/services/hair",
     image:
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80",
+      "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=900&q=85",
   },
   {
     slug: "facial",
-    title: "Facial Treatment",
-    short: "Radiance rituals tailored to your skin.",
+    title: "Facial",
+    short: "Glow, brightening, advanced & bridal facials.",
+    href: "/services/facial",
     image:
-      "https://images.unsplash.com/photo-1570172619647-dfd03c5b8628?w=800&q=80",
+      "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=900&q=85",
   },
   {
-    slug: "body",
-    title: "Body Treatment",
-    short: "Waxing, nails, laser, and full-body glow.",
+    slug: "body-spa",
+    title: "Body & spa",
+    short: "Massage, hammam-style rituals & body treatments.",
+    href: "/services/body-spa",
     image:
-      "https://images.unsplash.com/photo-1519415943484-9fa1873496d4?w=800&q=80",
+      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=900&q=85",
+  },
+  {
+    slug: "nails",
+    title: "Mani, pedi & nails",
+    short: "Manicure, pedicure, art, extensions & polish.",
+    href: "/services/nails",
+    image:
+      "https://images.unsplash.com/photo-1519014814348-9c6079d4ca79?w=900&q=85",
+  },
+  {
+    slug: "mehndi",
+    title: "Mehndi",
+    short: "Bridal, Arabic, feet art & occasion designs.",
+    href: "/services/mehndi",
+    image:
+      "https://images.unsplash.com/photo-1614204424926-65644c7833a7?w=900&q=85",
   },
   {
     slug: "makeup",
-    title: "Makeup Services",
-    short: "Bridal, party, and editorial artistry.",
+    title: "Makeup",
+    short: "Bridal, party & camera-ready looks.",
+    href: "/services",
     image:
-      "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80",
+      "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=900&q=85",
   },
 ] as const;
 
-export const bookingServices = [
+const bookingServicesBase = [
   "Bridal Makeup",
   "Party / Event Makeup",
   "Hair Color & Styling",
@@ -55,3 +82,16 @@ export const bookingServices = [
   "Laser Hair Removal",
   "Consultation / Trial",
 ] as const;
+
+/** Salon-wide bookable labels including all service menus. */
+export const bookingServices: string[] = Array.from(
+  new Set<string>([
+    ...allHairServiceNames(),
+    ...allFacialServiceNames(),
+    ...allBodySpaServiceNames(),
+    ...allNailsServiceNames(),
+    ...allMehndiServiceNames(),
+    ...allHomeMakeupCardNames(),
+    ...bookingServicesBase,
+  ])
+).sort((a, b) => a.localeCompare(b));

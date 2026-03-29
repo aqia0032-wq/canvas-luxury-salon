@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { addBooking, getBookings } from "@/lib/bookings-store";
+import { validateBookingBody } from "@/lib/booking-validation";
+import { clientIpFromRequest, rateLimitBooking } from "@/lib/rate-limit";
+import { lookupServicePriceLabel } from "@/lib/service-pricing-lookup";
 import {
   adminCookieName,
   verifySessionToken,
@@ -7,37 +10,41 @@ import {
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
+  const ip = clientIpFromRequest(request);
+  const limited = rateLimitBooking(`booking:${ip}`);
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many booking requests. Please try again in a few minutes." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(limited.retryAfterSec) },
+      }
+    );
+  }
+
+  let parsed: unknown;
   try {
-    const body = (await request.json()) as {
-      name?: string;
-      email?: string;
-      phone?: string;
-      service?: string;
-      date?: string;
-      time?: string;
-      message?: string;
-    };
-    const { name, email, phone, service, date, time, message } = body;
-    if (!name?.trim() || !email?.trim() || !phone?.trim()) {
-      return NextResponse.json(
-        { error: "Name, email, and phone are required." },
-        { status: 400 }
-      );
-    }
-    if (!service?.trim() || !date?.trim() || !time?.trim()) {
-      return NextResponse.json(
-        { error: "Service, date, and time are required." },
-        { status: 400 }
-      );
-    }
+    parsed = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  const checked = validateBookingBody(parsed);
+  if (!checked.ok) {
+    return NextResponse.json({ error: checked.error }, { status: checked.status });
+  }
+
+  const { name, email, phone, service, date, time, message } = checked.data;
+  try {
     const booking = await addBooking({
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      service: service.trim(),
-      date: date.trim(),
-      time: time.trim(),
-      message: message?.trim(),
+      name,
+      email,
+      phone,
+      service,
+      priceLabel: lookupServicePriceLabel(service),
+      date,
+      time,
+      message,
     });
     return NextResponse.json({ ok: true, id: booking.id });
   } catch {

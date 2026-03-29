@@ -4,7 +4,9 @@ import {
   adminCookieName,
   verifySessionToken,
 } from "@/lib/admin-session";
-import { updateBookingStatus, type BookingStatus } from "@/lib/bookings-store";
+import { isBookingId } from "@/lib/booking-validation";
+import { updateBookingStatus } from "@/lib/bookings-store";
+import type { BookingStatus } from "@/lib/bookings-types";
 
 export async function PATCH(request: Request) {
   const jar = await cookies();
@@ -12,13 +14,18 @@ export async function PATCH(request: Request) {
   if (!verifySessionToken(token)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  let body: { id?: string; status?: BookingStatus };
   try {
-    const body = (await request.json()) as {
-      id?: string;
-      status?: BookingStatus;
-    };
+    body = (await request.json()) as { id?: string; status?: BookingStatus };
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+  try {
     if (!body.id || !body.status) {
       return NextResponse.json({ error: "Missing id or status" }, { status: 400 });
+    }
+    if (!isBookingId(body.id)) {
+      return NextResponse.json({ error: "Invalid booking id" }, { status: 400 });
     }
     if (!["pending", "confirmed", "cancelled"].includes(body.status)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });

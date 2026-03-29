@@ -15,7 +15,13 @@
 
 # next.js
 /.next/
+/.next-build/
+/.next-salon/
 /out/
+
+# Local appointment data (do not commit customer PII)
+/data/bookings.json
+/data/appointments-log.jsonl
 
 # production
 /build

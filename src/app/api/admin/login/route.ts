@@ -13,10 +13,16 @@ export async function POST(request: Request) {
     }
     const token = createSessionToken();
     const res = NextResponse.json({ ok: true });
+    // Only use Secure cookies over HTTPS — on http://localhost (even `next start`)
+    // browsers drop Secure cookies, which looks like "password never works".
+    const url = new URL(request.url);
+    const forwarded = request.headers.get("x-forwarded-proto");
+    const secureCookie =
+      forwarded === "https" || url.protocol === "https:";
     res.cookies.set(adminCookieName, token, {
       httpOnly: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: secureCookie,
       path: "/",
       maxAge: 7 * 24 * 60 * 60,
     });

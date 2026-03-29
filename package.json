@@ -3,8 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "clean": "node scripts/clean-next.cjs",
+    "dev": "next dev --turbo",
+    "dev:webpack": "next dev",
+    "dev:clean": "node scripts/start-dev.cjs",
     "build": "next build",
+    "build:clean": "node scripts/build-with-clean.cjs",
+    "prestart": "node scripts/check-production-build.cjs",
     "start": "next start",
     "lint": "next lint"
   },
