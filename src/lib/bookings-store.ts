@@ -1,63 +1,33 @@
-import { readFile, writeFile, mkdir, appendFile } from "fs/promises";
-import path from "path";
+import { getStore } from "@netlify/blobs";
 import { randomUUID } from "crypto";
 import type { Booking, BookingStatus } from "@/lib/bookings-types";
 
 export type { Booking, BookingStatus } from "@/lib/bookings-types";
 
-/** Project-root `data/` — all appointment records stay on this machine’s disk. */
-export const BOOKINGS_DATA_DIR = path.join(process.cwd(), "data");
-const filePath = path.join(BOOKINGS_DATA_DIR, "bookings.json");
-const appendLogPath = path.join(BOOKINGS_DATA_DIR, "appointments-log.jsonl");
+const BOOKINGS_STORE_KEY = "bookings";
+const LOGS_STORE_KEY = "appointments-log";
 
-async function ensureFile(): Promise<void> {
+async function getBookingsStore() {
   try {
-    await mkdir(BOOKINGS_DATA_DIR, { recursive: true });
-    await readFile(filePath, "utf-8");
+    return await getStore("bookings");
   } catch {
-    await writeFile(filePath, "[]", "utf-8");
-  }
-}
-
-async function appendBookingToLocalLog(booking: Booking): Promise<void> {
-  try {
-    await mkdir(BOOKINGS_DATA_DIR, { recursive: true });
-    await appendFile(appendLogPath, `${JSON.stringify(booking)}\n`, "utf-8");
-  } catch {
-    // Authoritative store is bookings.json; log is a best-effort backup.
-  }
-}
-
-async function appendStatusChangeToLocalLog(
-  id: string,
-  status: BookingStatus,
-  booking: Booking
-): Promise<void> {
-  try {
-    await mkdir(BOOKINGS_DATA_DIR, { recursive: true });
-    await appendFile(
-      appendLogPath,
-      `${JSON.stringify({
-        _event: "status_update",
-        id,
-        status,
-        at: new Date().toISOString(),
-        booking,
-      })}\n`,
-      "utf-8"
-    );
-  } catch {
-    // best-effort; bookings.json is authoritative
+    // Fallback for local dev without Netlify context
+    return null;
   }
 }
 
 export async function getBookings(): Promise<Booking[]> {
-  await ensureFile();
-  const raw = await readFile(filePath, "utf-8");
   try {
-    const parsed = JSON.parse(raw) as Booking[];
+    const store = await getBookingsStore();
+    if (!store) return [];
+
+    const data = await store.get(BOOKINGS_STORE_KEY, { type: "json" });
+    if (!data) return [];
+
+    const parsed = data as Booking[];
     return Array.isArray(parsed) ? parsed : [];
-  } catch {
+  } catch (error) {
+    console.error("Error reading bookings:", error);
     return [];
   }
 }
@@ -65,29 +35,75 @@ export async function getBookings(): Promise<Booking[]> {
 export async function addBooking(
   input: Omit<Booking, "id" | "status" | "createdAt">
 ): Promise<Booking> {
-  await ensureFile();
-  const list = await getBookings();
-  const booking: Booking = {
-    ...input,
-    id: randomUUID(),
-    status: "pending",
-    createdAt: new Date().toISOString(),
-  };
-  list.unshift(booking);
-  await writeFile(filePath, JSON.stringify(list, null, 2), "utf-8");
-  await appendBookingToLocalLog(booking);
-  return booking;
+  try {
+    const store = await getBookingsStore();
+    if (!store) {
+      throw new Error("Blob store not available");
+    }
+
+    const list = await getBookings();
+    const booking: Booking = {
+      ...input,
+      id: randomUUID(),
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+
+    list.unshift(booking);
+    await store.set(BOOKINGS_STORE_KEY, JSON.stringify(list));
+
+    // Append to log
+    try {
+      const existingLog = await store.get(LOGS_STORE_KEY, { type: "text" });
+      const logContent = (existingLog || "") + `${JSON.stringify(booking)}\n`;
+      await store.set(LOGS_STORE_KEY, logContent, { type: "text" });
+    } catch {
+      // Log is best-effort
+    }
+
+    return booking;
+  } catch (error) {
+    console.error("Error adding booking:", error);
+    throw error;
+  }
 }
 
 export async function updateBookingStatus(
   id: string,
   status: BookingStatus
 ): Promise<Booking | null> {
-  const list = await getBookings();
-  const idx = list.findIndex((b) => b.id === id);
-  if (idx === -1) return null;
-  list[idx] = { ...list[idx], status };
-  await writeFile(filePath, JSON.stringify(list, null, 2), "utf-8");
-  await appendStatusChangeToLocalLog(id, status, list[idx]);
-  return list[idx];
+  try {
+    const store = await getBookingsStore();
+    if (!store) {
+      throw new Error("Blob store not available");
+    }
+
+    const list = await getBookings();
+    const idx = list.findIndex((b) => b.id === id);
+    if (idx === -1) return null;
+
+    list[idx] = { ...list[idx], status };
+    await store.set(BOOKINGS_STORE_KEY, JSON.stringify(list));
+
+    // Log status update
+    try {
+      const existingLog = await store.get(LOGS_STORE_KEY, { type: "text" });
+      const logEntry = JSON.stringify({
+        _event: "status_update",
+        id,
+        status,
+        at: new Date().toISOString(),
+        booking: list[idx],
+      });
+      const logContent = (existingLog || "") + `${logEntry}\n`;
+      await store.set(LOGS_STORE_KEY, logContent, { type: "text" });
+    } catch {
+      // Log is best-effort
+    }
+
+    return list[idx];
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    throw error;
+  }
 }
