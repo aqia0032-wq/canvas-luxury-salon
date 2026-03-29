@@ -21,7 +21,7 @@ export async function getBookings(): Promise<Booking[]> {
     const store = await getBookingsStore();
     if (!store) return [];
 
-    const data = await store.get(BOOKINGS_STORE_KEY, { type: "json" });
+    const data = await store.get(BOOKINGS_STORE_KEY);
     if (!data) return [];
 
     const parsed = data as Booking[];
@@ -54,9 +54,9 @@ export async function addBooking(
 
     // Append to log
     try {
-      const existingLog = await store.get(LOGS_STORE_KEY, { type: "text" });
+      const existingLog = await store.get(LOGS_STORE_KEY);
       const logContent = (existingLog || "") + `${JSON.stringify(booking)}\n`;
-      await store.set(LOGS_STORE_KEY, logContent, { type: "text" });
+      await store.set(LOGS_STORE_KEY, logContent);
     } catch {
       // Log is best-effort
     }
@@ -87,7 +87,7 @@ export async function updateBookingStatus(
 
     // Log status update
     try {
-      const existingLog = await store.get(LOGS_STORE_KEY, { type: "text" });
+      const existingLog = await store.get(LOGS_STORE_KEY);
       const logEntry = JSON.stringify({
         _event: "status_update",
         id,
@@ -96,7 +96,7 @@ export async function updateBookingStatus(
         booking: list[idx],
       });
       const logContent = (existingLog || "") + `${logEntry}\n`;
-      await store.set(LOGS_STORE_KEY, logContent, { type: "text" });
+      await store.set(LOGS_STORE_KEY, logContent);
     } catch {
       // Log is best-effort
     }
