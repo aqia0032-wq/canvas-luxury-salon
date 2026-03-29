@@ -42,46 +42,46 @@ const detailBlocks = [
 
 export default function ServicesPage() {
   return (
-    <div className="pt-28">
-      <section className="px-5 pb-16 md:px-8">
+    <div className="pt-24 sm:pt-28">
+      <section className="px-4 pb-12 sm:px-6 md:px-8 md:pb-16">
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Menu</p>
-            <h1 className="mt-3 max-w-3xl font-display text-5xl text-white md:text-6xl">
+            <h1 className="mt-3 max-w-3xl font-display text-3xl leading-tight text-white xs:text-4xl sm:text-5xl md:text-6xl">
               Services for every occasion
             </h1>
-            <p className="mt-6 max-w-2xl text-white/60">
+            <p className="mt-4 max-w-2xl text-sm text-white/60 sm:mt-6 sm:text-base">
               Curated rituals that balance precision and comfort — from quiet
               maintenance to show-stopping event looks.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-8 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
               <Link
                 href="/services/hair"
-                className="inline-flex rounded-full border border-gold/40 bg-gold/5 px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-gold transition hover:border-gold/60 hover:bg-gold/10"
+                className="inline-flex shrink-0 snap-start rounded-full border border-gold/40 bg-gold/5 px-4 py-2.5 text-[10px] font-medium uppercase tracking-widest text-gold transition hover:border-gold/60 hover:bg-gold/10 xs:px-6 xs:text-xs"
               >
                 Full hair menu
               </Link>
               <Link
                 href="/services/facial"
-                className="inline-flex rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10"
+                className="inline-flex shrink-0 snap-start rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-[10px] font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10 xs:px-6 xs:text-xs"
               >
                 Full facial menu
               </Link>
               <Link
                 href="/services/body-spa"
-                className="inline-flex rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10"
+                className="inline-flex shrink-0 snap-start rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-[10px] font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10 xs:px-6 xs:text-xs"
               >
                 Body & spa menu
               </Link>
               <Link
                 href="/services/nails"
-                className="inline-flex rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10"
+                className="inline-flex shrink-0 snap-start rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-[10px] font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10 xs:px-6 xs:text-xs"
               >
                 Mani, pedi & nails
               </Link>
               <Link
                 href="/services/mehndi"
-                className="inline-flex rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10"
+                className="inline-flex shrink-0 snap-start rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-[10px] font-medium uppercase tracking-widest text-white/80 transition hover:border-gold/40 hover:bg-white/10 xs:px-6 xs:text-xs"
               >
                 Mehndi
               </Link>
@@ -90,13 +90,13 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="border-t border-white/5 px-5 py-16 md:px-8">
+      <section className="border-t border-white/5 px-4 py-12 sm:px-6 md:px-8 md:py-16">
         <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {serviceCategories.map((s, idx) => (
-            <Reveal key={s.slug} delay={idx * 0.06}>
+            <Reveal key={s.slug} delay={idx * 0.06} scale>
               <Link
                 href={s.href}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition hover:border-gold/35 hover:shadow-gold"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition duration-500 hover:-translate-y-1 hover:border-gold/35 hover:shadow-gold"
               >
                 <div className="relative aspect-[4/5] w-full overflow-hidden">
                   <Image
@@ -130,12 +130,12 @@ export default function ServicesPage() {
       {detailBlocks.map((block, i) => (
         <section
           key={block.title}
-          className={`border-t border-white/5 px-5 py-20 md:px-8 ${
+          className={`border-t border-white/5 px-4 py-16 sm:px-6 md:px-8 md:py-20 ${
             i % 2 === 1 ? "bg-white/[0.02]" : ""
           }`}
         >
-          <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <Reveal className={i % 2 === 1 ? "lg:order-2" : ""}>
+          <div className="mx-auto grid max-w-7xl items-center gap-8 md:gap-12 lg:grid-cols-2 lg:gap-16">
+            <Reveal scale className={i % 2 === 1 ? "lg:order-2" : ""}>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
                 <Image
                   src={block.image}
@@ -146,14 +146,18 @@ export default function ServicesPage() {
                 />
               </div>
             </Reveal>
-            <Reveal className={i % 2 === 1 ? "lg:order-1" : ""} delay={0.08}>
+            <Reveal
+              scale
+              className={i % 2 === 1 ? "lg:order-1" : ""}
+              delay={0.08}
+            >
               <p className="text-xs uppercase tracking-[0.3em] text-gold">
                 Signature
               </p>
-              <h2 className="mt-3 font-display text-4xl text-white">
+              <h2 className="mt-3 font-display text-2xl text-white sm:text-3xl md:text-4xl">
                 {block.title}
               </h2>
-              <ul className="mt-8 space-y-3">
+              <ul className="mt-6 space-y-2.5 sm:mt-8 sm:space-y-3">
                 {block.items.map((item) => (
                   <li
                     key={item}

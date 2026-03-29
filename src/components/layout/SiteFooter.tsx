@@ -1,52 +1,68 @@
 import Link from "next/link";
+import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/lib/site";
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/10 bg-black">
-      <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-2 md:px-8 lg:grid-cols-4">
-        <div>
-          <p className="font-display text-2xl tracking-wide text-white">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:gap-12 sm:px-6 md:grid-cols-2 md:px-8 md:py-16 lg:grid-cols-4">
+        <Reveal delay={0}>
+          <p className="font-display text-xl tracking-wide text-white sm:text-2xl">
             {site.name}
           </p>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">
             {site.description}
           </p>
-        </div>
-        <div>
+        </Reveal>
+        <Reveal delay={0.06}>
           <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold">
             Explore
           </p>
-          <ul className="mt-4 space-y-2 text-sm text-white/65">
+          <ul className="mt-4 space-y-3 text-sm text-white/65">
             <li>
-              <Link href="/services" className="hover:text-white">
+              <Link
+                href="/services"
+                className="inline-block min-h-[44px] py-2 hover:text-white"
+              >
                 Services
               </Link>
             </li>
             <li>
-              <Link href="/portfolio" className="hover:text-white">
+              <Link
+                href="/portfolio"
+                className="inline-block min-h-[44px] py-2 hover:text-white"
+              >
                 Portfolio
               </Link>
             </li>
             <li>
-              <Link href="/book" className="hover:text-white">
+              <Link
+                href="/book"
+                className="inline-block min-h-[44px] py-2 hover:text-white"
+              >
                 Book Appointment
               </Link>
             </li>
             <li>
-              <Link href="/admin/login" className="hover:text-white/40">
+              <Link
+                href="/admin/login"
+                className="inline-block min-h-[44px] py-2 hover:text-white/40"
+              >
                 Staff
               </Link>
             </li>
           </ul>
-        </div>
-        <div>
+        </Reveal>
+        <Reveal delay={0.12}>
           <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold">
             Contact
           </p>
           <ul className="mt-4 space-y-3 text-sm text-white/65">
             <li>
-              <a href={`mailto:${site.email}`} className="hover:text-white">
+              <a
+                href={`mailto:${site.email}`}
+                className="break-all hover:text-white"
+              >
                 {site.email}
               </a>
             </li>
@@ -55,10 +71,12 @@ export function SiteFooter() {
                 {site.phone}
               </a>
             </li>
-            <li className="max-w-[240px] leading-relaxed">{site.address}</li>
+            <li className="max-w-[min(100%,280px)] leading-relaxed">
+              {site.address}
+            </li>
           </ul>
-        </div>
-        <div>
+        </Reveal>
+        <Reveal delay={0.18}>
           <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold">
             Follow
           </p>
@@ -67,7 +85,7 @@ export function SiteFooter() {
               href={site.social.instagram}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-white/15 px-4 py-2 text-xs uppercase tracking-wider text-white/70 transition hover:border-gold/50 hover:text-gold"
+              className="rounded-full border border-white/15 px-4 py-2.5 text-xs uppercase tracking-wider text-white/70 transition hover:scale-[1.02] hover:border-gold/50 hover:text-gold active:scale-[0.98]"
             >
               Instagram
             </a>
@@ -75,14 +93,14 @@ export function SiteFooter() {
               href={site.social.facebook}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-white/15 px-4 py-2 text-xs uppercase tracking-wider text-white/70 transition hover:border-gold/50 hover:text-gold"
+              className="rounded-full border border-white/15 px-4 py-2.5 text-xs uppercase tracking-wider text-white/70 transition hover:scale-[1.02] hover:border-gold/50 hover:text-gold active:scale-[0.98]"
             >
               Facebook
             </a>
           </div>
-        </div>
+        </Reveal>
       </div>
-      <div className="border-t border-white/5 py-6 text-center text-xs text-white/40">
+      <div className="border-t border-white/5 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-center text-xs text-white/40">
         © {new Date().getFullYear()} {site.name}. All rights reserved.
       </div>
     </footer>

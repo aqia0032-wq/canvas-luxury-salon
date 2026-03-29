@@ -15,8 +15,8 @@ const heroImage =
 
 export default function FacialServicesPage() {
   return (
-    <div className="pt-28">
-      <section className="relative overflow-hidden px-5 pb-16 md:px-8">
+    <div className="pt-24 sm:pt-28">
+      <section className="relative overflow-hidden px-4 pb-12 sm:px-6 md:px-8 md:pb-16">
         <div className="absolute inset-0 top-0 -z-10">
           <Image
             src={heroImage}
@@ -39,7 +39,7 @@ export default function FacialServicesPage() {
             <p className="mt-6 text-xs uppercase tracking-[0.35em] text-gold">
               Facial menu
             </p>
-            <h1 className="mt-3 max-w-3xl font-display text-5xl text-white md:text-6xl">
+            <h1 className="mt-3 max-w-3xl font-display text-3xl text-white xs:text-4xl sm:text-5xl md:text-6xl">
               Facial services
             </h1>
             <p className="mt-6 max-w-2xl text-white/60">

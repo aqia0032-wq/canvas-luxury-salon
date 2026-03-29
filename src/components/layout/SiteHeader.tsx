@@ -53,9 +53,9 @@ export function SiteHeader() {
           : "bg-gradient-to-b from-black/80 to-transparent py-5"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 md:px-8">
-        <Link href="/" className="group flex items-center gap-2">
-          <span className="font-display text-xl tracking-[0.2em] text-white transition-colors group-hover:text-gold md:text-2xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 pt-[env(safe-area-inset-top)] sm:px-6 md:px-8">
+        <Link href="/" className="group flex min-h-[44px] items-center gap-2">
+          <span className="font-display text-lg tracking-[0.2em] text-white transition-colors group-hover:text-gold xs:text-xl md:text-2xl">
             {site.name.split(" ")[0]}
           </span>
           <span className="hidden text-[10px] font-light uppercase tracking-[0.35em] text-white/50 sm:inline">
@@ -197,72 +197,122 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <AnimatePresence>
+      <AnimatePresence mode="sync">
         {open && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="border-b border-white/10 bg-black/95 backdrop-blur-xl lg:hidden"
           >
-            <nav className="flex flex-col gap-1 px-5 py-6">
-              <Link
-                href="/"
-                className={`py-3 text-sm uppercase tracking-[0.2em] ${
-                  pathname === "/" ? "text-gold" : "text-white/80"
-                }`}
+            <motion.nav
+              className="flex flex-col gap-0.5 px-4 py-5 sm:px-6"
+              initial="hidden"
+              animate="show"
+              variants={{
+                hidden: {},
+                show: {
+                  transition: { staggerChildren: 0.05, delayChildren: 0.04 },
+                },
+              }}
+            >
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, x: -12 },
+                  show: { opacity: 1, x: 0 },
+                }}
               >
-                Home
-              </Link>
+                <Link
+                  href="/"
+                  className={`flex min-h-[48px] items-center py-2 text-sm uppercase tracking-[0.2em] ${
+                    pathname === "/" ? "text-gold" : "text-white/80"
+                  }`}
+                >
+                  Home
+                </Link>
+              </motion.div>
 
-              <div className="border-b border-white/5 py-1">
+              <motion.div
+                className="border-b border-white/5 py-1"
+                variants={{
+                  hidden: { opacity: 0, x: -12 },
+                  show: { opacity: 1, x: 0 },
+                }}
+              >
                 <button
                   type="button"
                   onClick={() => setMobileServicesOpen((v) => !v)}
-                  className="flex w-full items-center justify-between py-3 text-sm uppercase tracking-[0.2em] text-white/80"
+                  className="flex min-h-[48px] w-full items-center justify-between py-2 text-sm uppercase tracking-[0.2em] text-white/80"
                 >
                   Services
                   <span className="text-xs" aria-hidden>
                     {mobileServicesOpen ? "▴" : "▾"}
                   </span>
                 </button>
-                {mobileServicesOpen && (
-                  <div className="mb-2 ml-3 flex flex-col border-l border-gold/30 pl-4">
-                    {servicesSub.map((s) => (
-                      <Link
-                        key={s.href}
-                        href={s.href}
-                        className={`py-2 text-xs uppercase tracking-[0.15em] ${
-                          pathname === s.href ? "text-gold" : "text-white/65"
-                        }`}
-                      >
-                        {s.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+                <AnimatePresence initial={false}>
+                  {mobileServicesOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.22 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mb-2 ml-2 flex flex-col border-l border-gold/30 pl-3">
+                        {servicesSub.map((s) => (
+                          <Link
+                            key={s.href}
+                            href={s.href}
+                            className={`min-h-[44px] py-2.5 text-xs uppercase tracking-[0.15em] ${
+                              pathname === s.href
+                                ? "text-gold"
+                                : "text-white/65"
+                            }`}
+                          >
+                            {s.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
 
               {simpleLinks.map((l) => (
-                <Link
+                <motion.div
                   key={l.href}
-                  href={l.href}
-                  className={`py-3 text-sm uppercase tracking-[0.2em] ${
-                    pathname === l.href ? "text-gold" : "text-white/80"
+                  variants={{
+                    hidden: { opacity: 0, x: -12 },
+                    show: { opacity: 1, x: 0 },
+                  }}
+                >
+                  <Link
+                    href={l.href}
+                    className={`flex min-h-[48px] items-center py-2 text-sm uppercase tracking-[0.2em] ${
+                      pathname === l.href ? "text-gold" : "text-white/80"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, x: -12 },
+                  show: { opacity: 1, x: 0 },
+                }}
+              >
+                <Link
+                  href="/book"
+                  className={`flex min-h-[48px] items-center py-2 text-sm uppercase tracking-[0.2em] ${
+                    pathname === "/book" ? "text-gold" : "text-white/80"
                   }`}
                 >
-                  {l.label}
+                  Book
                 </Link>
-              ))}
-              <Link
-                href="/book"
-                className={`py-3 text-sm uppercase tracking-[0.2em] ${
-                  pathname === "/book" ? "text-gold" : "text-white/80"
-                }`}
-              >
-                Book
-              </Link>
-            </nav>
+              </motion.div>
+            </motion.nav>
           </motion.div>
         )}
       </AnimatePresence>

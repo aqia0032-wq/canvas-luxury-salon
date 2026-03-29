@@ -76,7 +76,7 @@ export function BookingForm({ defaultService }: FormProps) {
   return (
     <motion.form
       onSubmit={onSubmit}
-      className="glass-panel mx-auto max-w-xl space-y-6 rounded-3xl p-8 md:p-10"
+      className="glass-panel mx-auto max-w-xl space-y-5 rounded-2xl p-5 sm:space-y-6 sm:rounded-3xl sm:p-8 md:p-10"
       aria-busy={status === "loading"}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}

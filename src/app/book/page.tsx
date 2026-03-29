@@ -18,20 +18,20 @@ export default async function BookPage({
     typeof sp.service === "string" ? decodeURIComponent(sp.service) : undefined;
 
   return (
-    <div className="pt-28">
-      <section className="px-5 pb-24 md:px-8">
+    <div className="pt-24 sm:pt-28">
+      <section className="px-4 pb-16 sm:px-6 md:px-8 md:pb-24">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto max-w-2xl text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Booking</p>
-            <h1 className="mt-3 font-display text-5xl text-white md:text-6xl">
+            <h1 className="mt-3 font-display text-3xl text-white xs:text-4xl sm:text-5xl md:text-6xl">
               Reserve your time
             </h1>
-            <p className="mt-4 text-white/55">
+            <p className="mt-4 text-sm text-white/55 sm:text-base">
               Choose a service and preferred slot. We will confirm by phone or
               email within 48 hours.
             </p>
           </Reveal>
-          <div className="mt-14">
+          <div className="mt-10 sm:mt-14">
             <BookingForm defaultService={decoded} />
           </div>
         </div>

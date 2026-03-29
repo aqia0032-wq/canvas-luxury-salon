@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="pt-28">
-      <section className="px-5 pb-20 md:px-8">
+    <div className="pt-24 sm:pt-28">
+      <section className="px-4 pb-16 sm:px-6 md:px-8 md:pb-20">
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Our story</p>
-            <h1 className="mt-3 max-w-3xl font-display text-5xl text-white md:text-6xl">
+            <h1 className="mt-3 max-w-3xl font-display text-3xl text-white xs:text-4xl sm:text-5xl md:text-6xl">
               Artistry rooted in care
             </h1>
           </Reveal>

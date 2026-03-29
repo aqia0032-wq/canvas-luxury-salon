@@ -22,12 +22,12 @@ const shots = [
 
 export default function PortfolioPage() {
   return (
-    <div className="pt-28">
-      <section className="px-5 pb-12 md:px-8">
+    <div className="pt-24 sm:pt-28">
+      <section className="px-4 pb-10 sm:px-6 md:px-8 md:pb-12">
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Gallery</p>
-            <h1 className="mt-3 font-display text-5xl text-white md:text-6xl">
+            <h1 className="mt-3 font-display text-3xl text-white xs:text-4xl sm:text-5xl md:text-6xl">
               Portfolio
             </h1>
             <p className="mt-4 max-w-xl text-white/55">
@@ -37,7 +37,7 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-24 md:px-8">
+      <section className="px-4 pb-16 sm:px-6 md:px-8 md:pb-24">
         <div className="mx-auto columns-1 gap-4 sm:columns-2 lg:columns-3">
           {shots.map((src, idx) => (
             <Reveal key={src} delay={(idx % 4) * 0.05} className="mb-4 break-inside-avoid">

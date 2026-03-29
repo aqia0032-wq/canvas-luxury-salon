@@ -7,6 +7,14 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      xs: "475px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
     extend: {
       colors: {
         background: "var(--background)",
@@ -39,6 +47,8 @@ export default {
       animation: {
         shimmer: "shimmer 2.5s ease-in-out infinite",
         float: "float 6s ease-in-out infinite",
+        "glow-soft": "glow-soft 4s ease-in-out infinite",
+        "fade-up": "fade-up 0.7s ease-out forwards",
       },
       keyframes: {
         shimmer: {
@@ -48,6 +58,14 @@ export default {
         float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-8px)" },
+        },
+        "glow-soft": {
+          "0%, 100%": { boxShadow: "0 0 28px rgba(201, 169, 98, 0.12)" },
+          "50%": { boxShadow: "0 0 48px rgba(201, 169, 98, 0.22)" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
     },

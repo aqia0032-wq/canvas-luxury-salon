@@ -47,9 +47,9 @@ export function TestimonialSlider() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -24 }}
           transition={{ duration: 0.45 }}
-          className="glass-panel rounded-3xl px-8 py-10 text-center md:px-12"
+          className="glass-panel rounded-2xl px-5 py-8 text-center sm:rounded-3xl sm:px-8 sm:py-10 md:px-12"
         >
-          <p className="font-display text-xl leading-relaxed text-white/90 md:text-2xl">
+          <p className="font-display text-lg leading-relaxed text-white/90 sm:text-xl md:text-2xl">
             “{items[i].quote}”
           </p>
           <p className="mt-8 text-sm uppercase tracking-[0.2em] text-gold">
@@ -58,17 +58,21 @@ export function TestimonialSlider() {
           <p className="mt-1 text-xs text-white/45">{items[i].role}</p>
         </motion.div>
       </AnimatePresence>
-      <div className="mt-8 flex justify-center gap-2">
+      <div className="mt-6 flex justify-center gap-1 sm:mt-8 sm:gap-2">
         {items.map((_, idx) => (
           <button
             key={idx}
             type="button"
             aria-label={`Show testimonial ${idx + 1}`}
             onClick={() => setI(idx)}
-            className={`h-1.5 rounded-full transition-all ${
-              idx === i ? "w-8 bg-gold" : "w-2 bg-white/25 hover:bg-white/40"
-            }`}
-          />
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2"
+          >
+            <span
+              className={`block h-1.5 rounded-full transition-all ${
+                idx === i ? "w-8 bg-gold" : "w-2 bg-white/25 hover:bg-white/40"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>
